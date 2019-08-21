@@ -1,17 +1,20 @@
 require 'job_queuing'
 
 RSpec.describe JobQueing do
-  let(:jobs) { JobQueing.new("") }
+  let(:jobs_empty) { JobQueing.new("") }
+  let (:one_job_without_precedence) { JobQueing.new("a") }
+
+
   # Receives ""
   # Returns ""
   it "must returns an empty string when receives an empty string" do
-    expect(jobs.ordered_jobs).to eq("")
+    expect(jobs_empty.ordered_jobs).to eq("")
   end
 
   # Receives "a"
   # Returns "a"
   it "must returns a single character string when receives only one job" do
-
+    expect(one_job_without_precedence.ordered_jobs).to eq("a")
   end
 
   # Receives "a,b,c"
