@@ -4,7 +4,7 @@ RSpec.describe JobQueing do
   let(:jobs_empty) { JobQueing.new("") }
   let(:one_job_without_precedence) { JobQueing.new("a") }
   let(:three_jobs_without_precedence) { JobQueing.new("a,b,c") }
-
+  let(:jobs_with_precedence) { JobQueing.new("a,b=>c,c=>f,d=>a,e=>b,f") }
 
   # Receives ""
   # Returns ""
@@ -26,10 +26,10 @@ RSpec.describe JobQueing do
     expect(three_jobs_without_precedence.ordered_jobs).to_not match('[d-z]')
   end
 
-  # Receives "a,b=>c,c"
-  # Returns "a,c,b"
+  # Receives "a,b=>c,c=>f,d=>a,e=>b,f"
+  # Returns "a,f,c,b,d,e"
   it "must returns a string with jobs ordered considering precedence" do
-  
+    expect(jobs_with_precedence.ordered_jobs).to eq("a,f,c,b,d,e")
   end
 
   # Receives "a,b,c=>c"
@@ -42,6 +42,28 @@ RSpec.describe JobQueing do
   # Returns "Error: Jobs cannot have circular dependencies"
   it "returns an error when find circular dependency" do
   
+  end
+
+  it "has ability to mark a job as ordered" do
+    job = Job.new("a","b",false)
+    jobs_with_precedence.mark_as_ordered(job)
+    obj = jobs_with_precedence.jobs.select { |job_id|  job_id.id == job.id }
+    expect(obj[0].ordered).to eq(true) 
+  end
+
+  it "has ability to return one job when search for precedence but the job doesn't have one" do
+    job = Job.new("a","",false)
+    expect(one_job_without_precedence.get_precedences([job])).to eq([job])
+
+    job = Job.new("a","",true)
+    expect(one_job_without_precedence.get_precedences([job])).to be_nil
+  end
+
+  it "can return an array of precedences including the actual job" do
+    job = Job.new("b","c",false)
+    precedences = jobs_with_precedence.get_precedences([job])
+    str_precedences = precedences.map { |j| j.id}.join(',')
+    expect(str_precedences).to eq("f,c,b")
   end
 
 end
