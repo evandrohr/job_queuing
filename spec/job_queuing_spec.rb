@@ -1,5 +1,6 @@
+require 'job_queuing'
 
-Rspec.describe JobQueing do
+RSpec.describe JobQueing do
 
   # Receives ""
   # Returns ""
@@ -21,7 +22,7 @@ Rspec.describe JobQueing do
 
   # Receives "a,b=>c,c"
   # Returns "a,c,b"
-  it "must returns a string with jobs ordered considering precedence"
+  it "must returns a string with jobs ordered considering precedence" do
   
   end
 
