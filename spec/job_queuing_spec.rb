@@ -1,11 +1,11 @@
 require 'job_queuing'
 
 RSpec.describe JobQueing do
-
+  let(:jobs) { JobQueing.new("") }
   # Receives ""
   # Returns ""
   it "must returns an empty string when receives an empty string" do
-
+    expect(jobs.ordered_jobs).to eq("")
   end
 
   # Receives "a"

@@ -4,6 +4,6 @@ class JobQueing
   end
 
   def ordered_jobs
-
+    @jobs
   end
 end
