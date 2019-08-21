@@ -6,6 +6,7 @@ RSpec.describe JobQueing do
   let(:three_jobs_without_precedence) { JobQueing.new("a,b,c") }
   let(:jobs_with_precedence) { JobQueing.new("a,b=>c,c=>f,d=>a,e=>b,f") }
   let(:jobs_referring_themselves) { JobQueing.new("a,b,c=>c") }
+  let(:jobs_with_circular_dependencies) { JobQueing.new("a,b=>c,c=>f,d=>a,e,f=>b") }
 
   # Receives ""
   # Returns ""
@@ -42,7 +43,7 @@ RSpec.describe JobQueing do
   # Receives "a,b=>c,c=>f,d=>a,e,f=>b"
   # Returns "Error: Jobs cannot have circular dependencies"
   it "returns an error when find circular dependency" do
-  
+    expect(jobs_with_circular_dependencies.sorted_jobs).to eq("Error: Jobs cannot have circular dependencies")
   end
 
   it "has ability to mark a job as sorted" do

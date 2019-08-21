@@ -1,6 +1,6 @@
 require 'byebug'
 
-Job = Struct.new(:id,:precedence,:sorted)
+Job = Struct.new(:id,:precedence,:sorted,:circular_reference)
 
 class JobQueing
   attr_reader :jobs
@@ -9,7 +9,7 @@ class JobQueing
     @jobs = []
     unsorted_jobs = jobs.split(',')
     unsorted_jobs.each do |job|
-      @jobs << Job.new(job.split("=>")[0], job.split("=>")[1].to_s, false)
+      @jobs << Job.new(job.split("=>")[0], job.split("=>")[1].to_s, false, false)
     end
   end
 
@@ -19,6 +19,10 @@ class JobQueing
     @jobs.each do |job|
       next if job.sorted == true 
       get_precedences([job]).each do |precedence|
+        if precedence.circular_reference == true
+          return "Error: Jobs cannot have circular dependencies"
+        end
+        mark_as_sorted(precedence)
         sorted << precedence.id if precedence != nil
       end
     end
@@ -27,8 +31,6 @@ class JobQueing
   end
 
   def get_precedences(job)
-
-    # byebug
 
     if job[0].sorted == true
       return nil
@@ -42,12 +44,14 @@ class JobQueing
     precedent_job = @jobs.select { |job_id|  job_id.id == job[0].precedence }
    
     if precedent_job[0].sorted == false then
+      # Detecting circular reference
+      if (job.select { |job_id|  job_id.id == precedent_job[0].id }).size > 0
+        job[0].circular_reference = true
+        return job
+      end
       job.unshift(precedent_job[0])
-      mark_as_sorted(job[1])
       get_precedences(job)      
     end
-
-    mark_as_sorted(job[0])
 
     return job
   end
@@ -65,7 +69,7 @@ class JobQueing
         break
       end
     end
-    autoreferences
+    return autoreferences
   end
 
 end
