@@ -1,4 +1,4 @@
-# Job Enqueuing
+# Job Queuing
 
 Development of a class capable to order by priority jobs taking care abaout informed precedences
 
