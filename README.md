@@ -4,7 +4,9 @@ Development of a class capable to order by priority jobs taking care abaout info
 
 ## Getting Started
 
-This project was developed with simplicity and easy to install and test in mind. To achieve this I decided to create an environment using Docker to be sure users will have the same environment where the code was developed. Is it possible to run the test suite and use the class outside docker, by the way. The drawback will be the need to install a compatible ruby version and run 'bundle install'. Avoiding using Docker the user assumes the risk of contaminating their environment with unnecessary gems and ruby versions.
+This project was developed with simplicity, easy to install and test in mind. To achieve this I decided to create an environment using Docker to be sure users will have the same environment where the code was developed. Is it possible to run the test suite and use the class outside docker, by the way. The drawback will be the need to install a compatible ruby version and run 'bundle install'. Avoiding using Docker the user assumes the risk of contaminating their environment with unnecessary gems and ruby versions.
+The commits were made to show an incremental process of TDD development code.
+The better solution I found to handle precedences was using a recurring method. It have their fragility when handling circular references that was handled on algoritm.
 
 ### Prerequisites
 
@@ -22,72 +24,42 @@ Using without Docker
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+Using Docker:
 
 ```
-Give the example
+docker build -t job_queuing .
 ```
 
-And repeat
+Without Docker:
 
 ```
-until finished
+bundle install
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+Using Docker:
 
 ```
-Give an example
+docker run -t -i job_queuing
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
+Without Docker:
 
 ```
-Give an example
+rspec
 ```
 
-## Deployment
+### Running other sequences of jobs
 
-Add additional notes about how to deploy this on a live system
+With Docker:
 
-## Built With
+```
+docker run -t -i job_queuing /bin/bash -c "ruby queuing.rb 'a,b=>c,c=>f,d=>a,e=>b,f'"
+```
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+Without Docker:
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+```
+ruby queuing.rb 'a,b=>c,c=>f,d=>a,e=>b,f'
+```

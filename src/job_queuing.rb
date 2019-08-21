@@ -1,5 +1,3 @@
-require 'byebug'
-
 Job = Struct.new(:id,:precedence,:sorted,:circular_reference)
 
 class JobQueing
