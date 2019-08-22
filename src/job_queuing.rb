@@ -12,7 +12,7 @@ class JobQueing
   end
 
   def sorted_jobs
-    return "Error: Jobs cannot depends on themselves" if have_autoreference?
+    return "Error: Jobs cannot depends on themselves" if have_self_reference?
     sorted = []
     @jobs.each do |job|
       next if job.sorted == true 
@@ -59,7 +59,7 @@ class JobQueing
     obj[0].sorted = true
   end
 
-  def have_autoreference?
+  def have_self_reference?
     autoreferences = false
     @jobs.each do |job|
       if job.id == job.precedence.to_s then
