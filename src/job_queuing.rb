@@ -60,14 +60,14 @@ class JobQueing
   end
 
   def have_self_reference?
-    autoreferences = false
+    self_reference = false
     @jobs.each do |job|
       if job.id == job.precedence.to_s then
-        autoreferences = true
+        self_reference = true
         break
       end
     end
-    return autoreferences
+    return self_reference
   end
 
 end
