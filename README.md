@@ -4,7 +4,7 @@ Development of a class capable to order by priority jobs taking care about infor
 
 ## Getting Started
 
-This project was developed with simplicity, easy to install and test in mind. To achieve this I decided to create an environment using Docker to be sure users will have the same environment where the code was developed. Is it possible to run the test suite and use the class outside docker, by the way. The drawback will be the need to install a compatible ruby version and run 'bundle install'. Avoiding using Docker the user assumes the risk of contaminating their environment with unnecessary gems and ruby versions.
+This project was developed with simplicity, easy to install and test in mind. To achieve this I decided to create an environment using Docker to be sure users will have the same environment where the code was developed. It is possible to run the test suite and use the class outside docker, by the way. The drawback will be the need to install a compatible ruby version and run 'bundle install'. Avoiding using Docker the user assumes the risk of contaminating their environment with unnecessary gems and ruby versions.
 The commits were made to show an incremental process of TDD code development.
 The better solution I found to handle precedences was using a recurring method. It have their fragility when handling circular references that was handled on algoritm.
 
