@@ -1,7 +1,7 @@
 Job = Struct.new(:id,:precedence,:sorted,:circular_reference)
 
 class JobQueing
-  attr_reader :jobs
+  
 
   def initialize(jobs)
     @jobs = []
@@ -15,26 +15,25 @@ class JobQueing
     return "Error: Jobs cannot depends on themselves" if have_self_reference?
     sorted = []
     @jobs.each do |job|
-      next if job.sorted == true 
+      next if job.sorted 
       get_precedences([job]).each do |precedence|
-        if precedence.circular_reference == true
-          return "Error: Jobs cannot have circular dependencies"
-        end
+        return "Error: Jobs cannot have circular dependencies" if precedence.circular_reference
         mark_as_sorted(precedence)
-        sorted << precedence.id if precedence != nil
+        sorted << precedence.id unless precedence.nil?
       end
     end
 
     sorted.join(',')
   end
 
+  private
+  attr_reader :jobs
+
   def get_precedences(job)
 
-    if job[0].sorted == true
-      return nil
-    end
-
-    if job[0].precedence == "" then
+    return nil if job[0].sorted
+    
+    if job[0].precedence.empty? then
       mark_as_sorted(job[0])
       return job
     end
